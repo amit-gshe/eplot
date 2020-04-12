@@ -192,7 +192,7 @@ class OptionController
 
 				# ---- Do we print to dumb terminal?
 				when /^-d$|^--dumb$/
-	                if xargv.length>=i+2
+	                if xargv.length>=i+2 and argv[i+1][0,1]!="-"
 	                	@o["DumbOptions"]=checkOptArg(xargv,i)
 	                	i=i+1
 	                end
