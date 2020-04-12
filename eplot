@@ -84,7 +84,7 @@ Output file format options:
  -e --emf        Output to the emf file foo.emf
  -g --svg        Output to the svg file foo.svg
  -o <fname>      Specify the output filename
- -d --dumb       Output to dumb terminal (ascii art)
+ -d --dumb [<width>,<height>] Output to dumb terminal (ascii art)
 
 Output formatting options:
  -r <ranges>     set the range of x and y axis values
@@ -130,6 +130,7 @@ class OptionController
 		@o["LineType"]="lines"
 		@o["LineWidth"]="1"
 		@o["DoPDF"]=false
+		@o["DumbOptions"]=""
 		@o["MulFrMul"]=false
 		@o["MulFrSin"]=false
 		@o["MulFrSeq"]=false
@@ -189,9 +190,13 @@ class OptionController
 					@o["OutputFileSpecified"]=checkOptArg(xargv,i)
 					i=i+1
 
-			        # ---- Do we print to dumb terminal?
-			        when /^-d$|^--dumb$/
-			                com=com+"set terminal dumb;\n"
+				# ---- Do we print to dumb terminal?
+				when /^-d$|^--dumb$/
+	                if xargv.length>=i+2
+	                	@o["DumbOptions"]=checkOptArg(xargv,i)
+	                	i=i+1
+	                end
+	                com=com+"set terminal dumb %s;\n" % @o["DumbOptions"].gsub(","," ")
 
 				# ---- Multiple curves in a single diagram from different files
 				when /^-m$|^--mulfrmul$/
